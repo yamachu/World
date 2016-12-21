@@ -10,7 +10,7 @@ OUT_DIR = ./build
 OBJS = $(OUT_DIR)/objs/world/cheaptrick.o $(OUT_DIR)/objs/world/common.o $(OUT_DIR)/objs/world/d4c.o $(OUT_DIR)/objs/world/dio.o $(OUT_DIR)/objs/world/fft.o $(OUT_DIR)/objs/world/harvest.o $(OUT_DIR)/objs/world/matlabfunctions.o $(OUT_DIR)/objs/world/stonemask.o $(OUT_DIR)/objs/world/synthesis.o $(OUT_DIR)/objs/world/synthesisrealtime.o
 LIBS =
 
-all: default test
+all: default test mac_shared
 
 ###############################################################################################################
 ### Tests
@@ -48,6 +48,10 @@ $(OUT_DIR)/objs/world/stonemask.o : src/world/stonemask.h src/world/fft.h src/wo
 $(OUT_DIR)/objs/world/synthesis.o : src/world/synthesis.h src/world/common.h src/world/constantnumbers.h src/world/matlabfunctions.h src/world/macrodefinitions.h
 $(OUT_DIR)/objs/world/synthesisrealtime.o : src/world/synthesisrealtime.h src/world/common.h src/world/constantnumbers.h src/world/matlabfunctions.h src/world/macrodefinitions.h
 
+mac_shared: $(OUT_DIR)/libworld.dylib
+
+$(OUT_DIR)/libworld.dylib: $(OBJS) $(OUT_DIR)/objs/tools/audioio.o
+	$(CXX) $(CXXFLAGS) -dynamiclib $(OBJS) $(OUT_DIR)/objs/tools/audioio.o -o "$@"
 
 ###############################################################################################################
 ### Global rules
