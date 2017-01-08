@@ -64,9 +64,9 @@ typedef struct {
   double *impulse_response;
 
   // FFT
-  MinimumPhaseAnalysis minimum_phase;
-  InverseRealFFT inverse_real_fft;
-  ForwardRealFFT forward_real_fft;
+  MinimumPhaseAnalysis *minimum_phase;
+  InverseRealFFT *inverse_real_fft;
+  ForwardRealFFT *forward_real_fft;
 } WorldSynthesizer;
 
 //-----------------------------------------------------------------------------
