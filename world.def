@@ -27,3 +27,7 @@ EXPORTS
     DestroySynthesizer @17
     IsLocked @18
     Synthesis2 @19
+    ;AudioIO
+    wavwrite @20
+    GetAudioLength @21
+    wavread @22
