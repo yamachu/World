@@ -1,0 +1,29 @@
+LIBRARY world
+
+EXPORTS
+    ;CheapTrick
+    CheapTrick @1
+    InitializeCheapTrickOption @2
+    GetFFTSizeForCheapTrick @3
+    ;D4C
+    D4C @4
+    InitializeD4COption @5
+    ;Dio
+    Dio @6
+    InitializeDioOption @7
+    GetSamplesForDIO @8
+    ;Harvest
+    Harvest @9
+    InitializeHarvestOption @10
+    GetSamplesForHarvest @11
+    ;StoneMask
+    StoneMask @12
+    ;Synthesis
+    Synthesis @13
+    ;SynthesisRealtime
+    InitializeSynthesizer @14
+    AddParameters @15
+    RefreshSynthesizer @16
+    DestroySynthesizer @17
+    IsLocked @18
+    Synthesis2 @19
