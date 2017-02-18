@@ -10,7 +10,7 @@ OUT_DIR = ./build
 OBJS = $(OUT_DIR)/objs/world/cheaptrick.o $(OUT_DIR)/objs/world/common.o $(OUT_DIR)/objs/world/d4c.o $(OUT_DIR)/objs/world/dio.o $(OUT_DIR)/objs/world/fft.o $(OUT_DIR)/objs/world/harvest.o $(OUT_DIR)/objs/world/matlabfunctions.o $(OUT_DIR)/objs/world/stonemask.o $(OUT_DIR)/objs/world/synthesis.o $(OUT_DIR)/objs/world/synthesisrealtime.o
 LIBS =
 
-all: default test mac_shared
+all: default test
 
 ###############################################################################################################
 ### Tests
@@ -52,6 +52,11 @@ mac_shared: $(OUT_DIR)/libworld.dylib
 
 $(OUT_DIR)/libworld.dylib: $(OBJS) $(OUT_DIR)/objs/tools/audioio.o
 	$(CXX) $(CXXFLAGS) -dynamiclib $(OBJS) $(OUT_DIR)/objs/tools/audioio.o -o "$@"
+
+linux_shared: $(OUT_DIR)/libworld.so
+
+$(OUT_DIR)/libworld.so: $(OBJS) $(OUT_DIR)/objs/tools/audioio.o
+	$(CXX) $(CXXFLAGS) -shared $(OBJS) $(OUT_DIR)/objs/tools/audioio.o -o "$@"
 
 ###############################################################################################################
 ### Global rules
