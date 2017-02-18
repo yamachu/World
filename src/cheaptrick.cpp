@@ -1,6 +1,7 @@
 //-----------------------------------------------------------------------------
-// Copyright 2012-2016 Masanori Morise. All Rights Reserved.
+// Copyright 2012 Masanori Morise
 // Author: mmorise [at] yamanashi.ac.jp (Masanori Morise)
+// Last update: 2017/02/01
 //
 // Spectral envelope estimation on the basis of the idea of CheapTrick.
 //-----------------------------------------------------------------------------
@@ -181,7 +182,7 @@ void CheapTrick(const double *x, int x_length, int fs,
     const double *temporal_positions, const double *f0, int f0_length,
     const CheapTrickOption *option, double **spectrogram) {
   int fft_size = option->fft_size;
-  double f0_floor = 3.0 * fs / fft_size;
+  double f0_floor = 3.0 * fs / (fft_size - 3.0);
   double *spectral_envelope = new double[fft_size];
 
   ForwardRealFFT forward_real_fft = {0};
