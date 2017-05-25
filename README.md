@@ -6,18 +6,8 @@ It can estimate Fundamental frequency (F0), aperiodicity and spectral envelope a
 This source code is released under the modified-BSD license.
 There is no patent in all algorithms in WORLD.
 
-## Functions for aperiodicity codec were added (2017/03/22)
-You can code/decode the aperiodicity. The compression ratio is 1/205 in full-band speech (48 kHz).
-In cases where you use the full-band speech, there is no deterioration.
-There are examples in examples/codec_test directory.
-
-## Parameter I/O functions were added (2017/03/12)
-New files were added in tools directory.
-There are examples in examples/parameter_io directory.
-
-## Important notice (2017/01/02)
-You can control the fft_size in CheapTrick().
-According to this change, arguments in InitializeCheapTrickOption() have changed. Please see test.cpp.
+## Important notice (2017/05/20)
+In the latest version, the codec of spectral envelope has no compatibility with the previous version.
 
 ## References
 When you cite the latest version of WORLD in your paper, please use the sentence "WORLD \[1\] (D4C edition [2])" and cite the following papers.  
@@ -31,8 +21,11 @@ In CheapTrick, you can refer the following references.
 In DIO, you can refer the following reference.  
 [5] M. Morise, H. Kawahara and H. Katayose: Fast and reliable F0 estimation method based on the period extraction of vocal fold vibration of singing voice and speech, AES 35th International Conference, CD-ROM Proceeding, Feb. 2009.
 
-In Harvest, I submitted a paper to INTERSPEECH 2017.  
-[6] M. Morise: Harvest: A high-performance fundamental frequency estimator from speech signals, in Proc. INTERSPEECH 2017 (submitted).
+In Harvest, a paper was accepted!
+[6] M. Morise: Harvest: A high-performance fundamental frequency estimator from speech signals, in Proc. INTERSPEECH 2017 (accepted).
+
+In the codec of spectral envelope, a paper was accepted!
+[7] M. Morise, G. Miyashita and K. Ozawa: Low-dimensional representation of spectral envelope without deterioration for full-band speech analysis/synthesis system, in Proc. INTERSPEECH 2017 (accepted).
 
 ## Introduction of WORLD family
 

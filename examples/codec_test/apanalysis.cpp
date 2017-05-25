@@ -1,7 +1,7 @@
 //-----------------------------------------------------------------------------
 // Copyright 2017 Masanori Morise
 // Author: mmorise [at] yamanashi.ac.jp (Masanori Morise)
-// Last update: 2017/03/22
+// Last update: 2017/05/01
 //
 // Summary:
 // This example estimates the aperiodicity from an audio file
@@ -51,7 +51,7 @@ int SetOption(int argc, char **argv, int *fft_size, double *threshold,
     if (strcmp(argv[argc], "-f") == 0) *fft_size = atoi(argv[argc + 1]);
     if (strcmp(argv[argc], "-t") == 0) *threshold = atof(argv[argc + 1]);
     if (strcmp(argv[argc], "-o") == 0)
-      snprintf(filename, sizeof(argv[argc + 1]), argv[argc + 1]);
+      snprintf(filename, 200, argv[argc + 1]);
     if (strcmp(argv[argc], "-c") == 0) *compression_flag = 1;
     if (strcmp(argv[argc], "-h") == 0) {
       usage(argv[0]);
@@ -119,15 +119,15 @@ int main(int argc, char **argv) {
   // Default parameters
   D4COption option = { 0 };
   InitializeD4COption(&option);
+  option.threshold = 0.85;
   char filename[200] = "output.ap";
-  double threshold = 0.85;
   CheapTrickOption c_option = { 0 };
   InitializeCheapTrickOption(fs, &c_option);
   int fft_size = c_option.fft_size;
   int compression_flag = 0;
 
   // Options from command line
-  if (SetOption(argc, argv, &fft_size, &threshold, &compression_flag,
+  if (SetOption(argc, argv, &fft_size, &option.threshold, &compression_flag,
     filename) == 0) return 0;
 
   // Aperiodicity analysis
