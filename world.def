@@ -31,3 +31,11 @@ EXPORTS
     wavwrite @20
     GetAudioLength @21
     wavread @22
+    ;ParameterIO
+    WriteF0 @23
+    ReadF0 @24
+    GetHeaderInformation @25
+    WriteSpectralEnvelope @26
+    ReadSpectralEnvelope @27
+    WriteAperiodicity @28
+    ReadAperiodicity @29
