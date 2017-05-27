@@ -11,3 +11,12 @@ artifacts:
     name: x64_WORLD
   - path: 'build\x86_world.dll'
     name: x86_WORLD
+
+deploy:
+  provider: GitHub
+  auth_token:
+    secure: "phbIUL1pW4otTYZTo79JgBo7dznsGhCGU3Jbs8jLhM482kySCkP2oXWofXKMPqtc"
+  artifact: /.*world.dll/
+  on:
+    appveyor_repo_tag: true
+  force_update: true
