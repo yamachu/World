@@ -39,3 +39,9 @@ EXPORTS
     ReadSpectralEnvelope @27
     WriteAperiodicity @28
     ReadAperiodicity @29
+    ;Codec
+    GetNumberOfAperiodicities @30
+    CodeAperiodicity @31
+    DecodeAperiodicity @32
+    CodeSpectralEnvelope @33
+    DecodeSpectralEnvelope @34
