@@ -33,7 +33,7 @@ deploy:
   api_key:
     secure: KKSELOf4+BCxpQl007taR+wAN+ok26g+qIIpWtaxzv4fsRX0Ef3N5wY0qDUszz0LUUhi7fR5vBjYPwDz/Zfpccmv2Q4DAfJtqtXlrs20W1tDecglrQOkys78mlvs2IYlwhM2VxvxwEARONcwuhjOBAUiI+YpVjG62ZY+4vccsFrnrUq2kFJNV+HYMhImIAjNHnkbysIbjC7qYgVw01rS3f76qpirwpZDNzE/x8BvsfTPSN4iXafunft12QE0NpiZa52lbWsLnWl0lj37saHyHY+jFh2LILgYUy309+Cm9A1eLKoxWO8OSKfFLFLW7NQocgvFeCLQXzZo/sm8K8n9XwNEYv48ma7gMAkECBXuorYIo4WrCF4zc0xG8kIE0wU3o+IXSe+An8iPtWSWe/AAdyoD/rFozh4HrVbNj2PmGzFqIXGPWhTxV4s92rlMaRtvThkCgodrSzdZTLy7LT178r7iVtaysFp6DfxO/L2F+LISf7f4QPO8SeOK9MghkOYmuusCUT5OzlweHm17Xmhgzcigwx8Ptmj1iWY9rxknoTgLfjZUkYoJfhz42/m84GtPSfeJJXMXGGc1LP1Df8E5KIC4fIDCCz4tgBdVMGYu6WXR8EUSswhsRmqox5feyPUclw1z/ZtW77k5nmHpGrjc0nYTytHpuJO4EunLJxLKXVk=
   file_glob: true
-  file: "build/*libworld.{so,dylib}"
+  file: "build/*libworld.{so,dylib,a}"
   on:
     repo: yamachu/World
     # branch: type/for_cswrapper

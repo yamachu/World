@@ -50,13 +50,20 @@ $(OUT_DIR)/objs/world/synthesisrealtime.o : src/world/synthesisrealtime.h src/wo
 
 mac_shared: $(OUT_DIR)/libworld.dylib
 
-$(OUT_DIR)/libworld.dylib: $(OBJS) $(OUT_DIR)/objs/tools/audioio.o
-	$(CXX) $(CXXFLAGS) -dynamiclib $(OBJS) $(OUT_DIR)/objs/tools/audioio.o -o "$@"
+$(OUT_DIR)/libworld.dylib: $(OBJS) $(OUT_DIR)/objs/tools/audioio.o $(OUT_DIR)/objs/tools/parameterio.o
+	$(CXX) $(CXXFLAGS) -dynamiclib $(OBJS) $(OUT_DIR)/objs/tools/audioio.o $(OUT_DIR)/objs/tools/parameterio.o -o "$@"
 
 linux_shared: $(OUT_DIR)/libworld.so
 
-$(OUT_DIR)/libworld.so: $(OBJS) $(OUT_DIR)/objs/tools/audioio.o
-	$(CXX) $(CXXFLAGS) -shared $(OBJS) $(OUT_DIR)/objs/tools/audioio.o -o "$@"
+$(OUT_DIR)/libworld.so: $(OBJS) $(OUT_DIR)/objs/tools/audioio.o $(OUT_DIR)/objs/tools/parameterio.o
+	$(CXX) $(CXXFLAGS) -shared $(OBJS) $(OUT_DIR)/objs/tools/audioio.o $(OUT_DIR)/objs/tools/parameterio.o -o "$@"
+
+ios_static: $(OUT_DIR)/ios_libworld.a
+
+$(OUT_DIR)/ios_libworld.a: $(OBJS) $(OUT_DIR)/objs/tools/audioio.o $(OUT_DIR)/objs/tools/parameterio.o
+	$(AR) $(ARFLAGS) "$@" $(OBJS) $(OUT_DIR)/objs/tools/audioio.o $(OUT_DIR)/objs/tools/parameterio.o
+	$(RANLIB) "$@"
+
 
 ###############################################################################################################
 ### Global rules
@@ -79,7 +86,7 @@ $(OUT_DIR)/objs/world/%.o : src/%.cpp
 
 clean:
 	@echo 'Removing all temporary binaries... '
-	@$(RM) $(OUT_DIR)/libworld.a $(OBJS)
+	@$(RM) $(OUT_DIR)/libworld.a $(OBJS) $(OUT_DIR)/objs/tools/audioio.o $(OUT_DIR)/objs/tools/parameterio.o
 	@$(RM) $(test_OBJS) $(ctest_OBJS) $(OUT_DIR)/test $(OUT_DIR)/ctest
 	@echo Done.
 
