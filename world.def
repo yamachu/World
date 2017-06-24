@@ -5,43 +5,44 @@ EXPORTS
     CheapTrick @1
     InitializeCheapTrickOption @2
     GetFFTSizeForCheapTrick @3
+    GetF0FloorForCheapTrick @4
     ;D4C
-    D4C @4
-    InitializeD4COption @5
+    D4C @5
+    InitializeD4COption @6
     ;Dio
-    Dio @6
-    InitializeDioOption @7
-    GetSamplesForDIO @8
+    Dio @7
+    InitializeDioOption @8
+    GetSamplesForDIO @9
     ;Harvest
-    Harvest @9
-    InitializeHarvestOption @10
-    GetSamplesForHarvest @11
+    Harvest @10
+    InitializeHarvestOption @11
+    GetSamplesForHarvest @12
     ;StoneMask
-    StoneMask @12
+    StoneMask @13
     ;Synthesis
-    Synthesis @13
+    Synthesis @14
     ;SynthesisRealtime
-    InitializeSynthesizer @14
-    AddParameters @15
-    RefreshSynthesizer @16
-    DestroySynthesizer @17
-    IsLocked @18
-    Synthesis2 @19
+    InitializeSynthesizer @15
+    AddParameters @16
+    RefreshSynthesizer @17
+    DestroySynthesizer @18
+    IsLocked @19
+    Synthesis2 @20
     ;AudioIO
-    wavwrite @20
-    GetAudioLength @21
-    wavread @22
+    wavwrite @21
+    GetAudioLength @22
+    wavread @23
     ;ParameterIO
-    WriteF0 @23
-    ReadF0 @24
-    GetHeaderInformation @25
-    WriteSpectralEnvelope @26
-    ReadSpectralEnvelope @27
-    WriteAperiodicity @28
-    ReadAperiodicity @29
+    WriteF0 @24
+    ReadF0 @25
+    GetHeaderInformation @26
+    WriteSpectralEnvelope @27
+    ReadSpectralEnvelope @28
+    WriteAperiodicity @29
+    ReadAperiodicity @30
     ;Codec
-    GetNumberOfAperiodicities @30
-    CodeAperiodicity @31
-    DecodeAperiodicity @32
-    CodeSpectralEnvelope @33
-    DecodeSpectralEnvelope @34
+    GetNumberOfAperiodicities @31
+    CodeAperiodicity @32
+    DecodeAperiodicity @33
+    CodeSpectralEnvelope @34
+    DecodeSpectralEnvelope @35
