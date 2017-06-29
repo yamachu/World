@@ -46,3 +46,6 @@ EXPORTS
     DecodeAperiodicity @33
     CodeSpectralEnvelope @34
     DecodeSpectralEnvelope @35
+
+    ;Utils
+    getWorldLibraryInfo @36

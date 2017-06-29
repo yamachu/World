@@ -50,18 +50,18 @@ $(OUT_DIR)/objs/world/synthesisrealtime.o : src/world/synthesisrealtime.h src/wo
 
 mac_shared: $(OUT_DIR)/libworld.dylib
 
-$(OUT_DIR)/libworld.dylib: $(OBJS) $(OUT_DIR)/objs/tools/audioio.o $(OUT_DIR)/objs/tools/parameterio.o
-	$(CXX) $(CXXFLAGS) -dynamiclib $(OBJS) $(OUT_DIR)/objs/tools/audioio.o $(OUT_DIR)/objs/tools/parameterio.o -o "$@"
+$(OUT_DIR)/libworld.dylib: $(OBJS) $(OUT_DIR)/objs/tools/audioio.o $(OUT_DIR)/objs/tools/parameterio.o $(OUT_DIR)/objs/utils/version.o
+	$(CXX) $(CXXFLAGS) -dynamiclib $(OBJS) $(OUT_DIR)/objs/tools/audioio.o $(OUT_DIR)/objs/tools/parameterio.o  $(OUT_DIR)/objs/utils/version.o -o "$@"
 
 linux_shared: $(OUT_DIR)/libworld.so
 
-$(OUT_DIR)/libworld.so: $(OBJS) $(OUT_DIR)/objs/tools/audioio.o $(OUT_DIR)/objs/tools/parameterio.o
-	$(CXX) $(CXXFLAGS) -shared $(OBJS) $(OUT_DIR)/objs/tools/audioio.o $(OUT_DIR)/objs/tools/parameterio.o -o "$@"
+$(OUT_DIR)/libworld.so: $(OBJS) $(OUT_DIR)/objs/tools/audioio.o $(OUT_DIR)/objs/tools/parameterio.o $(OUT_DIR)/objs/utils/version.o
+	$(CXX) $(CXXFLAGS) -shared $(OBJS) $(OUT_DIR)/objs/tools/audioio.o $(OUT_DIR)/objs/tools/parameterio.o  $(OUT_DIR)/objs/utils/version.o -o "$@"
 
 ios_static: $(OUT_DIR)/ios_libworld.a
 
-$(OUT_DIR)/ios_libworld.a: $(OBJS) $(OUT_DIR)/objs/tools/audioio.o $(OUT_DIR)/objs/tools/parameterio.o
-	$(AR) $(ARFLAGS) "$@" $(OBJS) $(OUT_DIR)/objs/tools/audioio.o $(OUT_DIR)/objs/tools/parameterio.o
+$(OUT_DIR)/ios_libworld.a: $(OBJS) $(OUT_DIR)/objs/tools/audioio.o $(OUT_DIR)/objs/tools/parameterio.o $(OUT_DIR)/objs/utils/version.o
+	$(AR) $(ARFLAGS) "$@" $(OBJS) $(OUT_DIR)/objs/tools/audioio.o $(OUT_DIR)/objs/tools/parameterio.o  $(OUT_DIR)/objs/utils/version.o
 	$(RANLIB) "$@"
 
 
@@ -84,9 +84,13 @@ $(OUT_DIR)/objs/world/%.o : src/%.cpp
 	mkdir -p $(OUT_DIR)/objs/world
 	$(CXX) $(CXXFLAGS) -Isrc -o "$@" -c "$<"
 
+$(OUT_DIR)/objs/utils/%.o : utils/%.cpp
+	mkdir -p $(OUT_DIR)/objs/utils
+	$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
 clean:
 	@echo 'Removing all temporary binaries... '
-	@$(RM) $(OUT_DIR)/libworld.a $(OBJS) $(OUT_DIR)/objs/tools/audioio.o $(OUT_DIR)/objs/tools/parameterio.o
+	@$(RM) $(OUT_DIR)/libworld.a $(OBJS) $(OUT_DIR)/objs/tools/audioio.o $(OUT_DIR)/objs/tools/parameterio.o $(OUT_DIR)/objs/utils/version.o
 	@$(RM) $(test_OBJS) $(ctest_OBJS) $(OUT_DIR)/test $(OUT_DIR)/ctest
 	@echo Done.
 

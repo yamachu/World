@@ -1,9 +1,12 @@
 environment:
   matrix:
     - ARCH: "x86"
+      PYTHON: "C:\\Python35"
     - ARCH: "x64"
+      PYTHON: "C:\\Python35"
 
 build_script:
+  - "%PYTHON%\\python.exe version_replace.py"
   - ./build_windows.bat
 
 artifacts:

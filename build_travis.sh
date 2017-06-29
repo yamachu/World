@@ -2,6 +2,10 @@
 
 if [[ $TRAVIS_OS_NAME == 'osx' ]]; then
   echo "OSX build"
+
+  my_python=$(which python3.5)
+  ${my_python:=python3} version_replace.py
+
   make mac_shared
   make clean
   export CXX=`xcrun --sdk iphoneos -f clang++`
@@ -31,6 +35,7 @@ if [[ $TRAVIS_OS_NAME == 'osx' ]]; then
   -arch i386 build/i386_ios_libworld.a \
   -output build/ios_libworld.a
 else
+  python3.5 version_replace.py
   make linux_shared CXX=$CXX CXXFLAGS="${CXXFLAGS}" LDFLAGS="$LDFLAGS"
   mv build/libworld.so build/${_ARCHNAME_}libworld.so
 fi
