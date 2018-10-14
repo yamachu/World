@@ -3,10 +3,45 @@
 # Add steps that publish test results, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/apps/c-cpp/gcc
 
-pool:
-  vmImage: 'Ubuntu 16.04'
+jobs:
+- job: Linux
+  pool:
+    vmImage: 'ubuntu-16.04'
+  steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.6'
+      architecture: 'x64'
+  - script: |
+      python3 version_replace.py
+      make linux_shared
+      
+- job: Android
+  pool:
+    vmImage: 'ubuntu-16.04'
+  steps:
+  - script: |
+      echo 'Todo: implement'
 
-steps:
-- script: |
-    make
-  displayName: 'make'
+- job: macOS
+  pool:
+    vmImage: 'macOS-10.13'
+  steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.6'
+      architecture: 'x64'
+  - script: |
+      python3 version_replace.py
+      make mac_shared
+
+- job: Windows
+  pool:
+    vmImage: 'vs2017-win2016'
+  steps:
+    - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.6'
+      architecture: 'x64'
+    - script: |
+        echo todo
