@@ -40,8 +40,8 @@ jobs:
     vmImage: 'vs2017-win2016'
   steps:
     - task: UsePythonVersion@0
-    inputs:
-      versionSpec: '3.6'
-      architecture: 'x64'
+      inputs:
+        versionSpec: '3.6'
+        architecture: 'x64'
     - script: |
         echo todo
