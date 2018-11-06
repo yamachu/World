@@ -198,7 +198,7 @@ void decimate(const double *x, int x_length, int r, double *y) {
   for (int i = 0; i < 2 * kNFact + x_length; ++i)
     tmp1[i] = tmp2[2 * kNFact + x_length - i - 1];
 
-  int nout = x_length / r + 1;
+  int nout = (x_length - 1) / r + 1;
   int nbeg = r - r * nout + x_length;
 
   int count = 0;
@@ -240,26 +240,38 @@ void interp1Q(double x, double shift, const double *y, int x_length,
   delete[] delta_y;
 }
 
-double randn(void) {
-  static uint32_t x = 123456789;
-  static uint32_t y = 362436069;
-  static uint32_t z = 521288629;
-  static uint32_t w = 88675123;
-  uint32_t t;
-  t = x ^ (x << 11);
-  x = y;
-  y = z;
-  z = w;
-  w = (w ^ (w >> 19)) ^ (t ^ (t >> 8));
+// You must not use these variables.
+// Note:
+// I have no idea to implement the randn() and randn_reseed() without the
+// global variables. If you have a good idea, please give me the information.
+static uint32_t g_randn_x = 123456789;
+static uint32_t g_randn_y = 362436069;
+static uint32_t g_randn_z = 521288629;
+static uint32_t g_randn_w = 88675123;
 
-  uint32_t tmp = w >> 4;
+void randn_reseed() {
+    g_randn_x = 123456789;
+    g_randn_y = 362436069;
+    g_randn_z = 521288629;
+    g_randn_w = 88675123;
+}
+
+double randn(void) {
+  uint32_t t;
+  t = g_randn_x ^ (g_randn_x << 11);
+  g_randn_x = g_randn_y;
+  g_randn_y = g_randn_z;
+  g_randn_z = g_randn_w;
+  g_randn_w = (g_randn_w ^ (g_randn_w >> 19)) ^ (t ^ (t >> 8));
+
+  uint32_t tmp = g_randn_w >> 4;
   for (int i = 0; i < 11; ++i) {
-    t = x ^ (x << 11);
-    x = y;
-    y = z;
-    z = w;
-    w = (w ^ (w >> 19)) ^ (t ^ (t >> 8));
-    tmp += w >> 4;
+    t = g_randn_x ^ (g_randn_x << 11);
+    g_randn_x = g_randn_y;
+    g_randn_y = g_randn_z;
+    g_randn_z = g_randn_w;
+    g_randn_w = (g_randn_w ^ (g_randn_w >> 19)) ^ (t ^ (t >> 8));
+    tmp += g_randn_w >> 4;
   }
   return tmp / 268435456.0 - 6.0;
 }
