@@ -1,0 +1,37 @@
+name: build
+
+on:
+  push:
+    branches:
+    - !master
+    pull_request:
+    - !master
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: replace version
+      run: python3 version_replace.py
+    - name: build
+      run: make linux_shared CXX=g++ CXXFLAGS="-O1 -Wall -fPIC" LDFLAGS=""
+    - name: rename
+      run: mv build/libworld.so build/Linux_libworld.so
+  build-mac:
+    runs-on: macOS-latest
+    steps:
+    - uses: actions/checkout@v1
+  build-ios:
+    runs-on: macOS-latest
+    steps:
+    - uses: actions/checkout@v1
+  build-android:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+  build-windows:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v1
+
