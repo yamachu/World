@@ -19,6 +19,10 @@ jobs:
     runs-on: macOS-latest
     steps:
     - uses: actions/checkout@v1
+    - name: replace version
+      run: python3 version_replace.py
+    - name: build
+      run: make build/osx
   build-ios:
     runs-on: macOS-latest
     steps:

@@ -60,10 +60,9 @@ $(OUT_DIR)/objs/world/stonemask.o : src/world/stonemask.h src/world/fft.h src/wo
 $(OUT_DIR)/objs/world/synthesis.o : src/world/synthesis.h src/world/common.h src/world/constantnumbers.h src/world/matlabfunctions.h src/world/macrodefinitions.h
 $(OUT_DIR)/objs/world/synthesisrealtime.o : src/world/synthesisrealtime.h src/world/common.h src/world/constantnumbers.h src/world/matlabfunctions.h src/world/macrodefinitions.h
 
-mac_shared: $(OUT_DIR)/libworld.dylib
-
-$(OUT_DIR)/libworld.dylib: $(OBJS) $(OUT_DIR)/objs/tools/audioio.o $(OUT_DIR)/objs/tools/parameterio.o $(OUT_DIR)/objs/utils/version.o
-	$(CXX) $(CXXFLAGS) -dynamiclib $(OBJS) $(OUT_DIR)/objs/tools/audioio.o $(OUT_DIR)/objs/tools/parameterio.o  $(OUT_DIR)/objs/utils/version.o -o "$@"
+$(ARCH_DIST_DIR)/libworld.dylib: $(OBJS) $(OUT_DIR)/objs/tools/audioio.o $(OUT_DIR)/objs/tools/parameterio.o $(OUT_DIR)/objs/utils/version.o
+	$(MAKE) $(ARCH_DIST_DIR)
+	$(CXX) $(CXXFLAGS) -dynamiclib $^ -o $@
 
 $(ARCH_DIST_DIR)/libworld.so: $(OBJS) $(OUT_DIR)/objs/tools/audioio.o $(OUT_DIR)/objs/tools/parameterio.o $(OUT_DIR)/objs/utils/version.o
 	$(MAKE) $(ARCH_DIST_DIR)
@@ -74,6 +73,10 @@ ios_static: $(OUT_DIR)/ios_libworld.a
 $(OUT_DIR)/ios_libworld.a: $(OBJS) $(OUT_DIR)/objs/tools/audioio.o $(OUT_DIR)/objs/tools/parameterio.o $(OUT_DIR)/objs/utils/version.o
 	$(AR) $(ARFLAGS) "$@" $(OBJS) $(OUT_DIR)/objs/tools/audioio.o $(OUT_DIR)/objs/tools/parameterio.o  $(OUT_DIR)/objs/utils/version.o
 	$(RANLIB) "$@"
+
+build/osx: ARCH = osx
+build/osx:
+	$(MAKE) $(DIST_DIR)/$(ARCH)/libworld.dylib ARCH=$(ARCH)
 
 build/linux: ARCH = linux
 build/linux:
@@ -113,5 +116,5 @@ clean:
 
 clear: clean
 
-.PHONY: clean clear test default build/linux
+.PHONY: clean clear test default build/linux build/osx
 .DELETE_ON_ERRORS:
