@@ -14,9 +14,7 @@ jobs:
     - name: replace version
       run: python3 version_replace.py
     - name: build
-      run: make linux_shared CXX=g++ CXXFLAGS="-O1 -Wall -fPIC" LDFLAGS=""
-    - name: rename
-      run: mv build/libworld.so build/Linux_libworld.so
+      run: make build/linux # todo: rename build/Linux_libworld.so
   build-mac:
     runs-on: macOS-latest
     steps:

@@ -5,8 +5,15 @@ AR = ar
 #DEBUG_FLAG=-g
 CXXFLAGS = -O1 -Wall -fPIC $(DEBUG_FLAG)
 CFLAGS = $(CXXFLAGS)
+LDFLAGS =
 ARFLAGS = -rv
 OUT_DIR = ./build
+DIST_DIR = ./dist
+ARCH =
+ifdef ARCH
+	ARCH_DIST_DIR = $(DIST_DIR)/$(ARCH)
+	OUT_DIR := $(OUT_DIR)/$(ARCH)
+endif
 OBJS = $(OUT_DIR)/objs/world/cheaptrick.o $(OUT_DIR)/objs/world/common.o $(OUT_DIR)/objs/world/d4c.o $(OUT_DIR)/objs/world/dio.o $(OUT_DIR)/objs/world/fft.o $(OUT_DIR)/objs/world/harvest.o $(OUT_DIR)/objs/world/matlabfunctions.o $(OUT_DIR)/objs/world/stonemask.o $(OUT_DIR)/objs/world/synthesis.o $(OUT_DIR)/objs/world/synthesisrealtime.o $(OUT_DIR)/objs/world/codec.o
 LIBS =
 MKDIR = mkdir -p $(1)
@@ -58,10 +65,9 @@ mac_shared: $(OUT_DIR)/libworld.dylib
 $(OUT_DIR)/libworld.dylib: $(OBJS) $(OUT_DIR)/objs/tools/audioio.o $(OUT_DIR)/objs/tools/parameterio.o $(OUT_DIR)/objs/utils/version.o
 	$(CXX) $(CXXFLAGS) -dynamiclib $(OBJS) $(OUT_DIR)/objs/tools/audioio.o $(OUT_DIR)/objs/tools/parameterio.o  $(OUT_DIR)/objs/utils/version.o -o "$@"
 
-linux_shared: $(OUT_DIR)/libworld.so
-
-$(OUT_DIR)/libworld.so: $(OBJS) $(OUT_DIR)/objs/tools/audioio.o $(OUT_DIR)/objs/tools/parameterio.o $(OUT_DIR)/objs/utils/version.o
-	$(CXX) $(CXXFLAGS) -shared $(OBJS) $(OUT_DIR)/objs/tools/audioio.o $(OUT_DIR)/objs/tools/parameterio.o  $(OUT_DIR)/objs/utils/version.o -o "$@"
+$(ARCH_DIST_DIR)/libworld.so: $(OBJS) $(OUT_DIR)/objs/tools/audioio.o $(OUT_DIR)/objs/tools/parameterio.o $(OUT_DIR)/objs/utils/version.o
+	$(MAKE) $(ARCH_DIST_DIR)
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) -shared $^ -o "$@"
 
 ios_static: $(OUT_DIR)/ios_libworld.a
 
@@ -69,6 +75,9 @@ $(OUT_DIR)/ios_libworld.a: $(OBJS) $(OUT_DIR)/objs/tools/audioio.o $(OUT_DIR)/ob
 	$(AR) $(ARFLAGS) "$@" $(OBJS) $(OUT_DIR)/objs/tools/audioio.o $(OUT_DIR)/objs/tools/parameterio.o  $(OUT_DIR)/objs/utils/version.o
 	$(RANLIB) "$@"
 
+build/linux: ARCH = linux
+build/linux:
+	$(MAKE) $(DIST_DIR)/$(ARCH)/libworld.so ARCH=$(ARCH)
 
 ###############################################################################################################
 ### Global rules
@@ -93,6 +102,9 @@ $(OUT_DIR)/objs/utils/%.o : utils/%.cpp
 	mkdir -p $(OUT_DIR)/objs/utils
 	$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
 
+$(ARCH_DIST_DIR):
+	$(call MKDIR,$@)
+
 clean:
 	@echo 'Removing all temporary binaries... '
 	@$(RM) $(OUT_DIR)/libworld.a $(OBJS) $(OUT_DIR)/objs/tools/audioio.o $(OUT_DIR)/objs/tools/parameterio.o $(OUT_DIR)/objs/utils/version.o
@@ -101,5 +113,5 @@ clean:
 
 clear: clean
 
-.PHONY: clean clear test default
+.PHONY: clean clear test default build/linux
 .DELETE_ON_ERRORS:
