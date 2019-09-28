@@ -68,10 +68,9 @@ $(ARCH_DIST_DIR)/libworld.so: $(OBJS) $(OUT_DIR)/objs/tools/audioio.o $(OUT_DIR)
 	$(MAKE) $(ARCH_DIST_DIR)
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -shared $^ -o "$@"
 
-ios_static: $(OUT_DIR)/ios_libworld.a
-
-$(OUT_DIR)/ios_libworld.a: $(OBJS) $(OUT_DIR)/objs/tools/audioio.o $(OUT_DIR)/objs/tools/parameterio.o $(OUT_DIR)/objs/utils/version.o
-	$(AR) $(ARFLAGS) "$@" $(OBJS) $(OUT_DIR)/objs/tools/audioio.o $(OUT_DIR)/objs/tools/parameterio.o  $(OUT_DIR)/objs/utils/version.o
+$(ARCH_DIST_DIR)/libworld.a: $(OBJS) $(OUT_DIR)/objs/tools/audioio.o $(OUT_DIR)/objs/tools/parameterio.o $(OUT_DIR)/objs/utils/version.o
+	$(MAKE) $(ARCH_DIST_DIR)
+	$(AR) $(ARFLAGS) "$@" $^
 	$(RANLIB) "$@"
 
 build/osx: ARCH = osx
@@ -81,6 +80,41 @@ build/osx:
 build/linux: ARCH = linux
 build/linux:
 	$(MAKE) $(DIST_DIR)/$(ARCH)/libworld.so ARCH=$(ARCH)
+
+build/ios/x86_64: ARCH = ios/x86_64
+build/ios/x86_64: CXXFLAGS += -isysroot `xcrun --sdk iphonesimulator --show-sdk-path` -arch x86_64 -miphoneos-version-min=7.0
+build/ios/x86_64:
+	$(MAKE) $(DIST_DIR)/$(ARCH)/libworld.a ARCH=$(ARCH) CXXFLAGS="$(CXXFLAGS)"
+
+build/ios/i386: ARCH = ios/i386
+build/ios/i386: CXXFLAGS += -isysroot `xcrun --sdk iphonesimulator --show-sdk-path` -arch i386 -miphoneos-version-min=7.0
+build/ios/i386:
+	$(MAKE) $(DIST_DIR)/$(ARCH)/libworld.a ARCH=$(ARCH) CXXFLAGS="$(CXXFLAGS)"
+
+build/ios/armv7: ARCH = ios/armv7
+build/ios/armv7: CXXFLAGS += -isysroot `xcrun --sdk iphoneos --show-sdk-path` -arch armv7 -miphoneos-version-min=7.0
+build/ios/armv7:
+	$(MAKE) $(DIST_DIR)/$(ARCH)/libworld.a ARCH=$(ARCH) CXXFLAGS="$(CXXFLAGS)"
+
+build/ios/armv7s: ARCH = ios/armv7s
+build/ios/armv7s: CXXFLAGS += -isysroot `xcrun --sdk iphoneos --show-sdk-path` -arch armv7s -miphoneos-version-min=7.0
+build/ios/armv7s:
+	$(MAKE) $(DIST_DIR)/$(ARCH)/libworld.a ARCH=$(ARCH) CXXFLAGS="$(CXXFLAGS)"
+
+build/ios/arm64: ARCH = ios/arm64
+build/ios/arm64: CXXFLAGS += -isysroot `xcrun --sdk iphoneos --show-sdk-path` -arch arm64 -miphoneos-version-min=7.0
+build/ios/arm64:
+	$(MAKE) $(DIST_DIR)/$(ARCH)/libworld.a ARCH=$(ARCH) CXXFLAGS="$(CXXFLAGS)"
+
+build/ios: LIPO = `xcrun --sdk iphoneos -f lipo`
+build/ios: build/ios/x86_64 build/ios/i386 build/ios/armv7 build/ios/armv7s build/ios/arm64
+	$(LIPO) -create \
+		-arch armv7 $(DIST_DIR)/ios/armv7/libworld.a \
+		-arch armv7s $(DIST_DIR)/ios/armv7s/libworld.a \
+		-arch arm64 $(DIST_DIR)/ios/arm64/libworld.a \
+		-arch x86_64 $(DIST_DIR)/ios/x86_64/libworld.a \
+		-arch i386 $(DIST_DIR)/ios/i386/libworld.a \
+		-output $(DIST_DIR)/ios/libworld.a
 
 ###############################################################################################################
 ### Global rules
@@ -116,5 +150,5 @@ clean:
 
 clear: clean
 
-.PHONY: clean clear test default build/linux build/osx
+.PHONY: clean clear test default build/linux build/osx build/ios
 .DELETE_ON_ERRORS:

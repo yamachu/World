@@ -27,6 +27,14 @@ jobs:
     runs-on: macOS-latest
     steps:
     - uses: actions/checkout@v1
+    - name: replace version
+      run: python3 version_replace.py
+    - name: build
+      run: |
+        CXX=`xcrun --sdk iphoneos -f clang++`
+        AR=`xcrun --sdk iphoneos -f ar`
+        RANLIB=`xcrun --sdk iphoneos -f ranlib`
+        make build/ios CXX=${CXX} AR=${AR} RANLIB=${RANLIB} # todo: rename build/ios_libworld.a
   build-android:
     runs-on: ubuntu-latest
     steps:
