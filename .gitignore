@@ -12,3 +12,6 @@ visualstudio/win.VC.VC.opendb
 visualstudio/win.VC.db
 visualstudio/win/Debug/
 visualstudio/win/Release/
+
+# dist
+/dist/
