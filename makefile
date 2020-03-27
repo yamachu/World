@@ -7,7 +7,7 @@ CXXFLAGS = -O1 -Wall -fPIC $(DEBUG_FLAG)
 CFLAGS = $(CXXFLAGS)
 ARFLAGS = -rv
 OUT_DIR = ./build
-OBJS = $(OUT_DIR)/objs/world/cheaptrick.o $(OUT_DIR)/objs/world/common.o $(OUT_DIR)/objs/world/d4c.o $(OUT_DIR)/objs/world/dio.o $(OUT_DIR)/objs/world/fft.o $(OUT_DIR)/objs/world/harvest.o $(OUT_DIR)/objs/world/matlabfunctions.o $(OUT_DIR)/objs/world/stonemask.o $(OUT_DIR)/objs/world/synthesis.o $(OUT_DIR)/objs/world/synthesisrealtime.o
+OBJS = $(OUT_DIR)/objs/world/cheaptrick.o $(OUT_DIR)/objs/world/common.o $(OUT_DIR)/objs/world/d4c.o $(OUT_DIR)/objs/world/dio.o $(OUT_DIR)/objs/world/fft.o $(OUT_DIR)/objs/world/harvest.o $(OUT_DIR)/objs/world/matlabfunctions.o $(OUT_DIR)/objs/world/stonemask.o $(OUT_DIR)/objs/world/synthesis.o $(OUT_DIR)/objs/world/synthesisrealtime.o $(OUT_DIR)/objs/world/codec.o
 LIBS =
 MKDIR = mkdir -p $(1)
 ifeq ($(shell echo "check_quotes"),"check_quotes")
@@ -53,6 +53,22 @@ $(OUT_DIR)/objs/world/stonemask.o : src/world/stonemask.h src/world/fft.h src/wo
 $(OUT_DIR)/objs/world/synthesis.o : src/world/synthesis.h src/world/common.h src/world/constantnumbers.h src/world/matlabfunctions.h src/world/macrodefinitions.h
 $(OUT_DIR)/objs/world/synthesisrealtime.o : src/world/synthesisrealtime.h src/world/common.h src/world/constantnumbers.h src/world/matlabfunctions.h src/world/macrodefinitions.h
 
+mac_shared: $(OUT_DIR)/libworld.dylib
+
+$(OUT_DIR)/libworld.dylib: $(OBJS) $(OUT_DIR)/objs/tools/audioio.o $(OUT_DIR)/objs/tools/parameterio.o $(OUT_DIR)/objs/utils/version.o
+	$(CXX) $(CXXFLAGS) -dynamiclib $(OBJS) $(OUT_DIR)/objs/tools/audioio.o $(OUT_DIR)/objs/tools/parameterio.o  $(OUT_DIR)/objs/utils/version.o -o "$@"
+
+linux_shared: $(OUT_DIR)/libworld.so
+
+$(OUT_DIR)/libworld.so: $(OBJS) $(OUT_DIR)/objs/tools/audioio.o $(OUT_DIR)/objs/tools/parameterio.o $(OUT_DIR)/objs/utils/version.o
+	$(CXX) $(CXXFLAGS) -shared $(OBJS) $(OUT_DIR)/objs/tools/audioio.o $(OUT_DIR)/objs/tools/parameterio.o  $(OUT_DIR)/objs/utils/version.o -o "$@"
+
+ios_static: $(OUT_DIR)/ios_libworld.a
+
+$(OUT_DIR)/ios_libworld.a: $(OBJS) $(OUT_DIR)/objs/tools/audioio.o $(OUT_DIR)/objs/tools/parameterio.o $(OUT_DIR)/objs/utils/version.o
+	$(AR) $(ARFLAGS) "$@" $(OBJS) $(OUT_DIR)/objs/tools/audioio.o $(OUT_DIR)/objs/tools/parameterio.o  $(OUT_DIR)/objs/utils/version.o
+	$(RANLIB) "$@"
+
 
 ###############################################################################################################
 ### Global rules
@@ -73,9 +89,13 @@ $(OUT_DIR)/objs/world/%.o : src/%.cpp
 	$(call MKDIR,$(OUT_DIR)/objs/world)
 	$(CXX) $(CXXFLAGS) -Isrc -o "$@" -c "$<"
 
+$(OUT_DIR)/objs/utils/%.o : utils/%.cpp
+	mkdir -p $(OUT_DIR)/objs/utils
+	$(CXX) $(CXXFLAGS) -o "$@" -c "$<"
+
 clean:
 	@echo 'Removing all temporary binaries... '
-	@$(RM) $(OUT_DIR)/libworld.a $(OBJS)
+	@$(RM) $(OUT_DIR)/libworld.a $(OBJS) $(OUT_DIR)/objs/tools/audioio.o $(OUT_DIR)/objs/tools/parameterio.o $(OUT_DIR)/objs/utils/version.o
 	@$(RM) $(test_OBJS) $(ctest_OBJS) $(OUT_DIR)/test $(OUT_DIR)/ctest
 	@echo Done.
 

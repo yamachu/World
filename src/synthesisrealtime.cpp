@@ -258,13 +258,13 @@ static void GetOneFrameSegment(int noise_size, int current_location,
 
   // Synthesis of the periodic response
   GetPeriodicResponse(synth->fft_size, spectral_envelope, aperiodic_ratio,
-      current_vuv, &synth->inverse_real_fft, &synth->minimum_phase,
+      current_vuv, synth->inverse_real_fft, synth->minimum_phase,
       synth->dc_remover, periodic_response);
 
   // Synthesis of the aperiodic response
   GetAperiodicResponse(noise_size, synth->fft_size, spectral_envelope,
-      aperiodic_ratio, current_vuv, &synth->forward_real_fft,
-      &synth->inverse_real_fft, &synth->minimum_phase, aperiodic_response);
+      aperiodic_ratio, current_vuv, synth->forward_real_fft,
+      synth->inverse_real_fft, synth->minimum_phase, aperiodic_response);
 
   double sqrt_noise_size = sqrt(static_cast<double>(noise_size));
   for (int i = 0; i < synth->fft_size; ++i)
@@ -467,12 +467,16 @@ void InitializeSynthesizer(int fs, double frame_period, int fft_size,
   synth->impulse_response = new double[synth->fft_size];
   synth->dc_remover = new double[synth->fft_size / 2];
 
+  synth->minimum_phase = new MinimumPhaseAnalysis;
+  synth->inverse_real_fft = new InverseRealFFT;
+  synth->forward_real_fft = new ForwardRealFFT;
+
   // Initilize internal parameters
   RefreshSynthesizer(synth);
 
-  InitializeMinimumPhaseAnalysis(fft_size, &synth->minimum_phase);
-  InitializeInverseRealFFT(fft_size, &synth->inverse_real_fft);
-  InitializeForwardRealFFT(fft_size, &synth->forward_real_fft);
+  InitializeMinimumPhaseAnalysis(fft_size, synth->minimum_phase);
+  InitializeInverseRealFFT(fft_size, synth->inverse_real_fft);
+  InitializeForwardRealFFT(fft_size, synth->forward_real_fft);
 }
 
 int AddParameters(double *f0, int f0_length, double **spectrogram,
@@ -555,9 +559,13 @@ void DestroySynthesizer(WorldSynthesizer *synth) {
   delete[] synth->number_of_pulses;
   delete[] synth->f0_origin;
 
-  DestroyMinimumPhaseAnalysis(&synth->minimum_phase);
-  DestroyInverseRealFFT(&synth->inverse_real_fft);
-  DestroyForwardRealFFT(&synth->forward_real_fft);
+  DestroyMinimumPhaseAnalysis(synth->minimum_phase);
+  DestroyInverseRealFFT(synth->inverse_real_fft);
+  DestroyForwardRealFFT(synth->forward_real_fft);
+
+  delete synth->minimum_phase;
+  delete synth->inverse_real_fft;
+  delete synth->forward_real_fft;
 }
 
 int IsLocked(WorldSynthesizer *synth) {

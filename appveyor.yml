@@ -1,0 +1,25 @@
+environment:
+  matrix:
+    - ARCH: "x86"
+      PYTHON: "C:\\Python35"
+    - ARCH: "x64"
+      PYTHON: "C:\\Python35"
+
+build_script:
+  - "%PYTHON%\\python.exe version_replace.py"
+  - ./build_windows.bat
+
+artifacts:
+  - path: 'build\x64_world.dll'
+    name: x64_WORLD
+  - path: 'build\x86_world.dll'
+    name: x86_WORLD
+
+deploy:
+  provider: GitHub
+  auth_token:
+    secure: "phbIUL1pW4otTYZTo79JgBo7dznsGhCGU3Jbs8jLhM482kySCkP2oXWofXKMPqtc"
+  artifact: /.*world.dll/
+  on:
+    appveyor_repo_tag: true
+  force_update: true

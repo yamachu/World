@@ -1,0 +1,51 @@
+LIBRARY world
+
+EXPORTS
+    ;CheapTrick
+    CheapTrick @1
+    InitializeCheapTrickOption @2
+    GetFFTSizeForCheapTrick @3
+    GetF0FloorForCheapTrick @4
+    ;D4C
+    D4C @5
+    InitializeD4COption @6
+    ;Dio
+    Dio @7
+    InitializeDioOption @8
+    GetSamplesForDIO @9
+    ;Harvest
+    Harvest @10
+    InitializeHarvestOption @11
+    GetSamplesForHarvest @12
+    ;StoneMask
+    StoneMask @13
+    ;Synthesis
+    Synthesis @14
+    ;SynthesisRealtime
+    InitializeSynthesizer @15
+    AddParameters @16
+    RefreshSynthesizer @17
+    DestroySynthesizer @18
+    IsLocked @19
+    Synthesis2 @20
+    ;AudioIO
+    wavwrite @21
+    GetAudioLength @22
+    wavread @23
+    ;ParameterIO
+    WriteF0 @24
+    ReadF0 @25
+    GetHeaderInformation @26
+    WriteSpectralEnvelope @27
+    ReadSpectralEnvelope @28
+    WriteAperiodicity @29
+    ReadAperiodicity @30
+    ;Codec
+    GetNumberOfAperiodicities @31
+    CodeAperiodicity @32
+    DecodeAperiodicity @33
+    CodeSpectralEnvelope @34
+    DecodeSpectralEnvelope @35
+
+    ;Utils
+    getWorldLibraryInfo @36
