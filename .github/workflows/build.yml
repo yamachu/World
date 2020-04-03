@@ -3,9 +3,8 @@ name: build
 on:
   push:
     branches:
-    - !master
-    pull_request:
-    - !master
+    - '!master'
+  pull_request:
 
 jobs:
   build-linux:
@@ -15,23 +14,57 @@ jobs:
     - name: replace version
       run: python3 version_replace.py
     - name: build
-      run: make linux_shared CXX=g++ CXXFLAGS="-O1 -Wall -fPIC" LDFLAGS=""
-    - name: rename
-      run: mv build/libworld.so build/Linux_libworld.so
+      run: make build/linux # todo: rename build/Linux_libworld.so
   build-mac:
     runs-on: macOS-latest
     steps:
     - uses: actions/checkout@v1
+    - name: replace version
+      run: python3 version_replace.py
+    - name: build
+      run: make build/osx
   build-ios:
     runs-on: macOS-latest
     steps:
     - uses: actions/checkout@v1
+    - name: replace version
+      run: python3 version_replace.py
+    - name: build
+      run: |
+        CXX=`xcrun --sdk iphoneos -f clang++`
+        AR=`xcrun --sdk iphoneos -f ar`
+        RANLIB=`xcrun --sdk iphoneos -f ranlib`
+        make build/ios CXX=${CXX} AR=${AR} RANLIB=${RANLIB} # todo: rename build/ios_libworld.a
   build-android:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
+    - name: replace version
+      run: python3 version_replace.py
+    - name: setup android toolchain
+      run: sh -x ./install_android.sh
+    - name: build arm
+      run: make build/linux CXX=/tmp/arm-toolchain/bin/clang++ CXXFLAGS="-O1 -Wall -fPIC -march=armv7-a -mfloat-abi=softfp -mfpu=neon" LDFLAGS="-march=armv7-a -Wl,--fix-cortex-a8" ARCH="android/arm"
+    - name: build arm64
+      run: make build/linux CXX=/tmp/arm64-toolchain/bin/clang++ CXXFLAGS="-O1 -Wall -fPIC" ARCH="android/arm64"
+    - name: build x86
+      run: make build/linux CXX=/tmp/x86-toolchain/bin/clang++ CXXFLAGS="-O1 -Wall -fPIC" ARCH="android/x86"
+    - name: build x86_64
+      run: make build/linux CXX=/tmp/x86_64-toolchain/bin/clang++ CXXFLAGS="-O1 -Wall -fPIC" ARCH="android/x86_64"
   build-windows:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v1
+    - name: build x86
+      shell: cmd
+      run: |
+        call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" amd64_x86
+        nmake -f Makefile.mak world.lib
+        dir
+    - name: build x64
+      shell: cmd
+      run: |
+        call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" amd64
+        nmake -f Makefile.mak world.lib
+        dir
 
